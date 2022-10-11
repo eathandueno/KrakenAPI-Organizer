@@ -1,9 +1,10 @@
 import requests
+# Individual nodes to find next
 class Node:
     def __init__(self,value=None):
         self.value = value
         self.next = None
-
+#  Create Class object for Crypto Asset information 
 class Cryptos:
     def __init__(self,search,altname,base,quote):
         self.search = search
@@ -12,24 +13,25 @@ class Cryptos:
         self.quote = quote
     
     
-
+# Fetch price function retrieving Kraken Asset list 
     def fetch_price(self):
         try:
             price = requests.get('https://api.kraken.com/0/public/Depth?pair=' + self.search).json()['result'][self.search]['bids'][0][0]
         except:
             price = requests.get('https://api.kraken.com/0/public/Depth?pair=' + self.base + self.quote).json()['result'][self.base + self.quote]['bids'][0][0]
         return price
-
+# Retrieve live date
     def fetch_volume(self):
         volume = requests.get('https://api.kraken.com/0/public/Depth?pair=' + self.search).json()['result'][self.search]['bids'][0][2]
         return volume
 
-
+# Filter function for each asset in linked list
 def siphon(request, string):
     
     for i in range(0,len(string)):
         if string[i:i + len(request):] == request:
             return True
+
 
 class LinkedList:
     def __init__(self):
@@ -140,7 +142,7 @@ class LinkedList:
                 return True
             else:
                 return False
-
+# API call to kraken website
 resp = requests.get('https://api.kraken.com/0/public/AssetPairs')
 
 json = resp.json()['result']
@@ -158,7 +160,7 @@ def get_all():
 
 favs = []
 all = get_all()
-
+# List of my favorites for a full stack project
 ethSearch = all.getByContent('XETHZUSD')[0]
 btcSearch = all.getByContent('XXBTZUSD')[0]
 solSearch = all.getByContent('SOLUSD')[1]
